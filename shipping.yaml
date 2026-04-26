@@ -1,0 +1,10 @@
+- name: Installing shipping
+  hosts: shipping
+  become: yes
+  tasks:
+  - name: installing packages
+    ansible.builtin.dnf:
+      name: maven
+      state: present
+  
+  
