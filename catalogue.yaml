@@ -77,7 +77,7 @@
 
   - name: Load the products in db
     ansible.builtin.shell: mongosh --host "{{ MONGODB_HOST }}" </app/db/master-data.js
-    when: db_output.stdout < 0
+    when: db_output.stdout | int < 0
     
 
   
