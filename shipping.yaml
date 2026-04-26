@@ -63,7 +63,7 @@
       daemon_reload: true
 
   - name: checking and loading data in db
-    community.mysql.mysql_info:
+    community.mysql.mysql_db:
        login_user: root
        login_password: RoboShop@1
        login_host: "{{ MYSQL_HOST }}"
