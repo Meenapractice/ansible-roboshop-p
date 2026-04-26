@@ -46,8 +46,8 @@
 
   - name: install pip requirements
     ansible.builtin.pip:
-      name: requirements.txt
-      state: present
+      requirements: /app/requirements.txt
+      executable: pip3
 
   - name: creating service file
     ansible.builtin.template:
