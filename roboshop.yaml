@@ -57,7 +57,7 @@
   - name: Delete r53 records
     amazon.aws.route53:
       zone: "{{ domain_name }}"
-      record: "{{ item.item }}-{{ env }}.{{ domain_name }}"
+      record: "{{ item }}-{{ env }}.{{ domain_name }}"
       type: A
       ttl: 1
       wait: false
