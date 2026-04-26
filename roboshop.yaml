@@ -5,6 +5,8 @@
     sg_id: "sg-0e05551e762cffc74"
     ami_id: "ami-0220d79f3f480ecf5"
     env: dev
+    action: create
+    domain_name: "devopstest.fun"
     instances:
     - mongodb
     - catalogue
@@ -22,7 +24,58 @@
         Name: "{{ item }} - {{ env }}"
     loop: "{{ instances }}"
     register: ec2_output
+    when: action == create
 
-  - name: Print the output
-    ansible.builtin.debug:
-      msg: "{{ ec2_output }}"
+  # - name: Print the output
+  #   ansible.builtin.debug:
+  #     msg: "{{ ec2_output }}"
+
+  - name: creating r53 records
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "{{ item.item }} - {{ env }}.{{ domain_name}}"
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0].private_ip_address }}"
+    loop: "{{ ec2_output.results }}"
+    when: action == create
+
+  - name: creating r53 record for Roboshop
+    amazon.aws.route53:
+      state: present
+      zone: "{{ domain_name }}"
+      record: "roboshop - {{ env }}.{{ domain_name }}"
+      type: A
+      ttl: 1
+      value: "{{ item.instances[0]. public_ip_address }}"
+    loop: "{{ ec2_output.results }}"
+    when: 
+    - item.item == "frontend"
+    - action == create
+
+  - name: Delete r53 records
+    amazon.aws.r53:
+      zone: "{{ domain_name }}"
+      record: "{{ item.item }} - {{ env }}.{{ domain_name }}"
+      type: A
+      ttl: 1
+      wait: false
+    loop: "{{ instances }}"
+    when: action == destroy
+
+  - name: Delete ec2-instances
+    amazon.aws.ec2_instance:
+        instance_type: "t3.micro"
+        security_group: "{{ sg_id }}"
+        image_id: "{{ ami_id }}"
+        name: "{{ item }} - {{ env }}"
+        tags:
+          Project: "Roboshop"
+          Component: "{{ item }}"
+          Environment: "{{ env }}"
+          Name: "{{ item }} - {{ env }}"
+    loop: "{{ instances }}"
+    when: action == destory
+    
+      
