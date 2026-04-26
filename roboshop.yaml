@@ -25,7 +25,6 @@
       wait: true
     loop: "{{ instances }}"
     register: ec2_output
-    when: action == "create"
 
   # - name: Print the output
   #   ansible.builtin.debug:
@@ -41,7 +40,6 @@
       value: "{{ item.instances[0].private_ip_address }}"
       overwrite: true
     loop: "{{ ec2_output.results }}"
-    when: action == "create"
 
   - name: creating r53 record for Roboshop
     amazon.aws.route53:
