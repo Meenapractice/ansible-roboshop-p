@@ -24,7 +24,7 @@
         Name: "{{ item }} - {{ env }}"
     loop: "{{ instances }}"
     register: ec2_output
-    when: action == create
+    when: action == "create"
 
   # - name: Print the output
   #   ansible.builtin.debug:
@@ -39,7 +39,7 @@
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
     loop: "{{ ec2_output.results }}"
-    when: action == create
+    when: action == "create"
 
   - name: creating r53 record for Roboshop
     amazon.aws.route53:
@@ -52,7 +52,7 @@
     loop: "{{ ec2_output.results }}"
     when: 
     - item.item == "frontend"
-    - action == create
+    - action == "create"
 
   - name: Delete r53 records
     amazon.aws.route53:
@@ -62,7 +62,7 @@
       ttl: 1
       wait: false
     loop: "{{ instances }}"
-    when: action == destroy
+    when: action == "destroy"
 
   - name: Delete ec2-instances
     amazon.aws.ec2_instance:
@@ -76,6 +76,6 @@
           Environment: "{{ env }}"
           Name: "{{ item }} - {{ env }}"
     loop: "{{ instances }}"
-    when: action == destory
+    when: action == "destory"
     
       
