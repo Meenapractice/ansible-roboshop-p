@@ -52,11 +52,6 @@
       src: catalogue.service
       dest: /etc/systemd/system/catalogue.service
 
-  - name: daemon reload the service file
-    ansible.builtin.systemd_service:
-      name: catalogue
-      state: reloaded
-
   - name: copy mongo.repo
     ansible.builtin.copy:
       src: mongo.repo
