@@ -45,5 +45,11 @@
 
   - name: install dependencies
     community.general.npm:
-      name: npm
       path: /app
+
+  - name: creating catalogue service file
+    ansible.builtin.copy:
+      src: catalogue.service
+      dest: /etc/systemd/system/catalogue.service
+
+  
