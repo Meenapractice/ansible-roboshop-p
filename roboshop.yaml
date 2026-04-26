@@ -22,6 +22,7 @@
         Component: "{{ item }}"
         Environment: "{{ env }}"
         Name: "{{ item }}-{{ env }}"
+      wait: true
     loop: "{{ instances }}"
     register: ec2_output
     when: action == "create"
@@ -38,6 +39,7 @@
       type: A
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
+      overwrite: true
     loop: "{{ ec2_output.results }}"
     when: action == "create"
 
@@ -77,6 +79,7 @@
           Component: "{{ item }}"
           Environment: "{{ env }}"
           Name: "{{ item }}-{{ env }}"
+        wait: false
     loop: "{{ instances }}"
     when: action == "destroy"
     
