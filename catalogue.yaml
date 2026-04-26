@@ -68,7 +68,7 @@
       state: present
 
   - name: checking if products are loaded in debug
-    ansible.builtin.command: mongosh --host $MONGODB_HOST --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
+    ansible.builtin.command: mongosh --host "{{ MONGODB_HOST }}" --quiet  --eval 'db.getMongo().getDBNames().indexOf("catalogue")'
     
 
   
