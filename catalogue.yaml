@@ -74,6 +74,10 @@
   - name: print the db output
     ansible.builtin.debug:
       msg: "{{ db_output }}"
+
+  - name: Load the products in db
+    ansible.builtin.shell: mongosh --host "{{ MONGODB_HOST }}" </app/db/master-data.js
+    when: db_output.stdout < 0
     
 
   
