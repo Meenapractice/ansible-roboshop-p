@@ -16,12 +16,12 @@
       instance_type: "t3.micro"
       security_group: "{{ sg_id }}"
       image_id: "{{ ami_id }}"
-      name: "{{ item }} - {{ env }}"
+      name: "{{ item }}-{{ env }}"
       tags:
         Project: "Roboshop"
         Component: "{{ item }}"
         Environment: "{{ env }}"
-        Name: "{{ item }} - {{ env }}"
+        Name: "{{ item }}-{{ env }}"
     loop: "{{ instances }}"
     register: ec2_output
     when: action == "create"
@@ -34,7 +34,7 @@
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
-      record: "{{ item.item }} - {{ env }}.{{ domain_name}}"
+      record: "{{ item.item }}-{{ env }}.{{ domain_name}}"
       type: A
       ttl: 1
       value: "{{ item.instances[0].private_ip_address }}"
@@ -45,7 +45,7 @@
     amazon.aws.route53:
       state: present
       zone: "{{ domain_name }}"
-      record: "roboshop - {{ env }}.{{ domain_name }}"
+      record: "roboshop-{{ env }}.{{ domain_name }}"
       type: A
       ttl: 1
       value: "{{ item.instances[0]. public_ip_address }}"
@@ -57,7 +57,7 @@
   - name: Delete r53 records
     amazon.aws.route53:
       zone: "{{ domain_name }}"
-      record: "{{ item.item }} - {{ env }}.{{ domain_name }}"
+      record: "{{ item.item }}-{{ env }}.{{ domain_name }}"
       type: A
       ttl: 1
       wait: false
@@ -69,12 +69,12 @@
         instance_type: "t3.micro"
         security_group: "{{ sg_id }}"
         image_id: "{{ ami_id }}"
-        name: "{{ item }} - {{ env }}"
+        name: "{{ item }}-{{ env }}"
         tags:
           Project: "Roboshop"
           Component: "{{ item }}"
           Environment: "{{ env }}"
-          Name: "{{ item }} - {{ env }}"
+          Name: "{{ item }}-{{ env }}"
     loop: "{{ instances }}"
     when: action == "destory"
     
