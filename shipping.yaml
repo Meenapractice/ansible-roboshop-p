@@ -64,8 +64,11 @@
 
   - name: pip install
     ansible.builtin.pip:
-      name: PyMySQL
+      name: "{{ item }}"
       state: present
+    loop:
+    - PyMySQL
+    - cryptography
 
   - name: checking and loading data in db
     community.mysql.mysql_db:
