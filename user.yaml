@@ -43,7 +43,7 @@
       dest: /app
 
   - name: installing dependenices
-    community.dependencies.npm:
+    community.general.npm:
       path: /app
 
   - name: creating the service file
